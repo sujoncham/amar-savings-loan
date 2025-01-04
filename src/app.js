@@ -10,6 +10,7 @@ const routerExpense = require("./modules/expense/expenseRoute");
 const routerBlog = require("./modules/blog/blogRoute");
 const routerUser = require("./modules/user/userRoute");
 const routerMessage = require("./modules/messages/messagesRoute");
+const routerTesti = require("./modules/testimonial/testimonialRoute");
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use("/api/expenses", routerExpense);
 app.use("/api/blogs", routerBlog);
 app.use("/api/users", routerUser);
 app.use("/api/message", routerMessage);
+app.use("/api/testimonials", routerTesti);
 
 // app.use((req, res, next) => {
 //   res.status(400).send("Request url was not found");

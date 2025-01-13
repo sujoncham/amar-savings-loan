@@ -29,26 +29,6 @@ exports.addOwner = async (req, res) => {
 };
 
 exports.addSavings = async (req, res) => {
-  // try {
-  //     const { id } = req.params;
-  //     const { amount } = req.body;
-
-  //     // Find the person by ID and update their savings
-  //     const person = await Person.findByIdAndUpdate(id);
-  //     if (!person) {
-  //       return res.status(404).json({ message: "Person not found" });
-  //     }
-
-  //     // Update savings
-  //     person.savings += amount;
-  //     await person.save();
-
-  //     res.status(200).json({ message: "Savings updated", person });
-  //   } catch (error) {
-  //     console.error("Error updating savings:", error);
-  //     res.status(500).json({ message: "Server error" });
-  //   }
-  // };
   const { id } = req.params;
   const { amount } = req.body;
   const person = await Person.findByIdAndUpdate(
@@ -76,5 +56,22 @@ exports.editSavings = async (req, res) => {
     res.status(200).json(person);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+exports.deleteSavings = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Person.findByIdAndDelete(id);
+    return res.status(200).json({
+      status: "success",
+      message: "person deleted successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "failed",
+      message: "Failed to delete user",
+      error: error.message,
+    });
   }
 };

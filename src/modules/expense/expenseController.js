@@ -7,9 +7,7 @@ exports.getAllExpenses = async (req, res) => {
     res.status(200).json({
       status: "success",
       results: expenses.length,
-      data: {
-        expenses,
-      },
+      data: expenses,
     });
   } catch (err) {
     res.status(400).json({

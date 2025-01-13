@@ -11,6 +11,7 @@ const routerBlog = require("./modules/blog/blogRoute");
 const routerUser = require("./modules/user/userRoute");
 const routerMessage = require("./modules/messages/messagesRoute");
 const routerTesti = require("./modules/testimonial/testimonialRoute");
+const routerDonate = require("./modules/donation/donateRoute");
 
 const app = express();
 
@@ -31,8 +32,14 @@ app.use(
     },
   })
 );
+// app.use(
+//   cors({
+//     origin: ["http://localhost:3000", "https://amar-savings-loan.netlify.app"],
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//   })
+// );
 
-app.use(express.json());
+// app.use(express.json());
 // app.use(cookieParser());
 
 // Routes
@@ -43,6 +50,11 @@ app.use("/api/blogs", routerBlog);
 app.use("/api/users", routerUser);
 app.use("/api/message", routerMessage);
 app.use("/api/testimonials", routerTesti);
+app.use("/api/donations", routerDonate);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+});
 
 // app.use((req, res, next) => {
 //   res.status(400).send("Request url was not found");

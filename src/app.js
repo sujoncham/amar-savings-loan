@@ -15,31 +15,15 @@ const routerDonate = require("./modules/donation/donateRoute");
 
 const app = express();
 
-// Middleware
-const allowedOrigins = [
-  "http://localhost:3000", // Development URL
-  "https://amar-savings-loan.netlify.app", // Production URL
-];
-
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: "http://localhost:3000", // Frontend origin
+    methods: ["GET", "POST"], // Allowed methods
+    credentials: true, // If you are sending cookies or authorization headers
   })
 );
-// app.use(
-//   cors({
-//     origin: ["http://localhost:3000", "https://amar-savings-loan.netlify.app"],
-//     methods: ["GET", "POST", "PUT", "DELETE"],
-//   })
-// );
 
-// app.use(express.json());
+app.use(express.json());
 // app.use(cookieParser());
 
 // Routes
@@ -51,10 +35,6 @@ app.use("/api/users", routerUser);
 app.use("/api/message", routerMessage);
 app.use("/api/testimonials", routerTesti);
 app.use("/api/donations", routerDonate);
-
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-});
 
 // app.use((req, res, next) => {
 //   res.status(400).send("Request url was not found");

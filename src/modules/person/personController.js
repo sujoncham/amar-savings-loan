@@ -1,8 +1,18 @@
 const Person = require("./personModel");
 
 exports.getPerson = async (req, res) => {
-  const persons = await Person.find();
-  res.json(persons);
+  try {
+    const persons = await Person.find();
+    res.status(200).json({
+      status: "success",
+      data: persons,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
 };
 
 exports.addOwner = async (req, res) => {
@@ -58,6 +68,7 @@ exports.editSavings = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 exports.deleteSavings = async (req, res) => {
   const { id } = req.params;
 

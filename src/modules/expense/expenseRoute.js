@@ -10,7 +10,7 @@ routerExpense.get("/", expenseController.getAllExpenses);
 routerExpense.get("/:id", expenseController.getExpenseById);
 
 // Route to create a new expense
-routerExpense.post("/", expenseController.createExpense);
+routerExpense.post("/addExpense", expenseController.createExpense);
 
 // Route to update an existing expense by ID
 routerExpense.put("/:id", expenseController.updateExpense);

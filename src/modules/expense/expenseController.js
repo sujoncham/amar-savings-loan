@@ -43,19 +43,26 @@ exports.getExpenseById = async (req, res) => {
 
 // Create new expense
 exports.createExpense = async (req, res) => {
+  console.log(req.body);
   try {
-    const newExpense = await Expense.create(req.body);
+    const { title, expense, note } = req.body;
+
+    // Mock database save (replace with actual DB code)
+    const newExpense = {
+      title,
+      expense,
+      note,
+    };
+
+    const expen = new Expense(newExpense).save();
+
     res.status(201).json({
-      status: "success",
-      data: {
-        expense: newExpense,
-      },
+      message: "Expense added successfully",
+      data: expen,
     });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
+  } catch (error) {
+    console.error("Error uploading blog:", error);
+    res.status(500).json({ error: "Failed to add blog" });
   }
 };
 

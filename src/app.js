@@ -15,13 +15,14 @@ const routerDonate = require("./modules/donation/donateRoute");
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "http://localhost:3000", // Frontend origin
-    methods: ["GET", "POST"], // Allowed methods
-    credentials: true, // If you are sending cookies or authorization headers
-  })
-);
+const corsOptions = {
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 // app.use(cookieParser());

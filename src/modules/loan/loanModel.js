@@ -6,6 +6,8 @@ const loanSchema = new mongoose.Schema({
   remainingLoan: { type: Number, required: true },
   totalInterest: { type: Number, required: true },
   remainingInterest: { type: Number, required: true },
+  recieveDate: { type: Date, default: Date.now },
+  referName: { type: String },
   history: [
     {
       date: { type: Date, default: Date.now },

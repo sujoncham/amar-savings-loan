@@ -5,7 +5,7 @@ exports.addLoan = async (req, res) => {
   console.log("Received body:", req.body);
 
   try {
-    const { name, totalLoan } = req.body;
+    const { name, totalLoan, referName, recieveDate } = req.body;
 
     // Validate required fields
     if (!name || !totalLoan) {
@@ -24,6 +24,8 @@ exports.addLoan = async (req, res) => {
       totalInterest,
       remainingInterest: totalInterest,
       history: [],
+      recieveDate,
+      referName,
     });
 
     const savedLoan = await loan.save();
@@ -99,13 +101,13 @@ exports.deductLoanPayment = async (req, res) => {
 
 exports.editLoans = async (req, res) => {
   console.log(req.body);
-  const { totalLoan } = req.body;
+  const { totalLoan, name } = req.body;
   const { id } = req.params;
 
   try {
     const loan = await Loan.findByIdAndUpdate(
       id,
-      { $set: { totalLoan } },
+      { $set: { totalLoan, name } },
       { new: true }
     );
     if (!loan) {
@@ -114,5 +116,27 @@ exports.editLoans = async (req, res) => {
     res.status(200).json(loan);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// Delete expense
+exports.delLoan = async (req, res) => {
+  try {
+    const loan = await Loan.findByIdAndDelete(req.params.id);
+    if (!loan) {
+      return res.status(404).json({
+        status: "fail",
+        message: "No loan found with that ID",
+      });
+    }
+    res.status(204).json({
+      status: "success",
+      data: null,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
   }
 };

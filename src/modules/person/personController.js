@@ -51,13 +51,13 @@ exports.addSavings = async (req, res) => {
 
 exports.editSavings = async (req, res) => {
   // console.log(req.body);
-  const { savings } = req.body;
+  const { savings, name } = req.body;
   const { id } = req.params;
 
   try {
     const person = await Person.findByIdAndUpdate(
       id,
-      { $set: { savings } },
+      { $set: { savings, name } },
       { new: true }
     );
     if (!person) {

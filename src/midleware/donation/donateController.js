@@ -2,7 +2,7 @@ const Donation = require("./donateModel");
 
 // Add donation
 exports.addDonation = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { amount } = req.body;
 
   if (!amount || amount <= 0) {
@@ -26,7 +26,7 @@ exports.addDonation = async (req, res) => {
 
 // Deduct donation (spend)
 exports.deductDonation = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { title, amount, note } = req.body;
 
   if (!title || !amount || amount <= 0) {
@@ -77,5 +77,53 @@ exports.getSummary = async (req, res) => {
       status: "fail",
       message: err.message,
     });
+  }
+};
+
+exports.editDonatedAmount = async (req, res) => {
+  try {
+    const { id } = req.params; // ID of the subdocument (donationHistory entry)
+    const { title, amount } = req.body;
+
+    const updatedDonation = await Donation.findOneAndUpdate(
+      { "donationHistory._id": id }, // Find document containing this subdocument
+      {
+        $set: {
+          "donationHistory.$.title": title,
+          "donationHistory.$.amount": amount,
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedDonation) {
+      return res.status(404).json({ message: "Donation not found" });
+    }
+
+    res.status(200).json(updatedDonation);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to edit donation", error });
+  }
+};
+
+exports.deleteDonatedAmount = async (req, res) => {
+  try {
+    const { id } = req.params; // ID of the subdocument (donationHistory entry)
+
+    const updatedDonation = await Donation.findOneAndUpdate(
+      { "donationHistory._id": id }, // Find document containing this subdocument
+      { $pull: { donationHistory: { _id: id } } }, // Remove the matching subdocument
+      { new: true }
+    );
+
+    if (!updatedDonation) {
+      return res.status(404).json({ message: "Donation not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Donation deleted successfully", updatedDonation });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete donation", error });
   }
 };

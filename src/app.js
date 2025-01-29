@@ -11,7 +11,7 @@ const routerBlog = require("./modules/blog/blogRoute");
 const routerUser = require("./modules/user/userRoute");
 const routerMessage = require("./modules/messages/messagesRoute");
 const routerTesti = require("./modules/testimonial/testimonialRoute");
-const routerDonate = require("./modules/donation/donateRoute");
+const routerDonated = require("./modules/others/othersRoute");
 
 const app = express();
 
@@ -35,7 +35,7 @@ app.use("/api/blogs", routerBlog);
 app.use("/api/users", routerUser);
 app.use("/api/message", routerMessage);
 app.use("/api/testimonials", routerTesti);
-app.use("/api/donations", routerDonate);
+app.use("/api/donations", routerDonated);
 
 // app.use((req, res, next) => {
 //   res.status(400).send("Request url was not found");

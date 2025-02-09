@@ -11,6 +11,7 @@ routerLoan.get("/", loanController.getLoans);
 // Deduct Loan Payment
 routerLoan.put("/:id/deduct-payment", loanController.deductLoanPayment);
 routerLoan.put("/:id/edit-loans", loanController.editLoans);
+routerLoan.put("/update-status/:id", loanController.updateLoanStatus);
 routerLoan.delete("/:id", loanController.delLoan);
 
 module.exports = routerLoan;

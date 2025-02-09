@@ -101,13 +101,13 @@ exports.deductLoanPayment = async (req, res) => {
 
 exports.editLoans = async (req, res) => {
   console.log(req.body);
-  const { totalLoan, name } = req.body;
+  const { totalLoan, name, note } = req.body;
   const { id } = req.params;
 
   try {
     const loan = await Loan.findByIdAndUpdate(
       id,
-      { $set: { totalLoan, name } },
+      { $set: { totalLoan, name, note } },
       { new: true }
     );
     if (!loan) {
@@ -138,5 +138,23 @@ exports.delLoan = async (req, res) => {
       status: "fail",
       message: err.message,
     });
+  }
+};
+
+exports.updateLoanStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const loan = await Loan.findById(id);
+
+    if (!loan) return res.status(404).json({ message: "Loan not found" });
+
+    // Toggle the status
+    loan.status = loan.status === "pending" ? "completed" : "pending";
+
+    await loan.save();
+
+    res.json({ message: "Loan status updated", loan });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update loan status", error });
   }
 };

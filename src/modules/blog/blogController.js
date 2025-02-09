@@ -29,14 +29,36 @@ exports.addBlog = async (req, res) => {
 
 exports.getBlogs = async (req, res) => {
   try {
-    const blogs = await BlogModel.find();
-    return res.status(200).json({
-      status: "success",
-      message: "Blog get successfully",
-      data: blogs,
+    let { page = 1, limit = 9, type } = req.query; // Default limit is 9 for the blog page
+    page = parseInt(page);
+    limit = parseInt(limit);
+
+    if (type === "home") {
+      // Fetch only 6 latest blogs for the home page
+      const latestBlogs = await BlogModel.find()
+        .sort({ createdAt: -1 })
+        .limit(6);
+
+      return res.json({
+        success: true,
+        data: latestBlogs,
+      });
+    }
+
+    // Fetch paginated blogs for the blog page
+    const totalBlogs = await BlogModel.countDocuments();
+    const paginatedBlogs = await BlogModel.find()
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    res.json({
+      success: true,
+      data: paginatedBlogs,
+      totalPages: Math.ceil(totalBlogs / limit),
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 

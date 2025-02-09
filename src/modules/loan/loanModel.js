@@ -8,6 +8,8 @@ const loanSchema = new mongoose.Schema({
   remainingInterest: { type: Number, required: true },
   recieveDate: { type: Date, default: Date.now },
   referName: { type: String },
+  status: { type: String, enum: ["pending", "completed"], default: "pending" }, // ✅ Add status
+  note: { type: String, default: "" }, // ✅ Add optional note
   history: [
     {
       date: { type: Date, default: Date.now },
@@ -17,16 +19,6 @@ const loanSchema = new mongoose.Schema({
       remainingInterest: { type: Number, required: true },
     },
   ],
-});
-// Validation for negative remaining values
-loanSchema.pre("save", function (next) {
-  if (this.remainingLoan < 0) {
-    return next(new Error("Remaining loan cannot be negative."));
-  }
-  if (this.remainingInterest < 0) {
-    return next(new Error("Remaining interest cannot be negative."));
-  }
-  next();
 });
 
 const Loan = mongoose.model("Loan", loanSchema);

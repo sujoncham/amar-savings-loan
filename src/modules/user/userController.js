@@ -24,7 +24,14 @@ exports.signin = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    res.status(200).json({ message: "Signin successful", userId });
+    res
+      .status(200)
+      .json({
+        message: "Signin successful",
+        userId,
+        name: user.name,
+        role: user.role[0],
+      });
   } catch (error) {
     res.status(500).json({ message: "Error signing in", error });
   }
@@ -32,7 +39,7 @@ exports.signin = async (req, res) => {
 
 exports.signup = async (req, res) => {
   console.log(req.body);
-  const { name, password } = req.body;
+  const { name, password, role } = req.body;
 
   try {
     // Check if the user already exists
@@ -45,7 +52,7 @@ exports.signup = async (req, res) => {
     const userId = generateUserId(name);
 
     // Create a new user
-    const newUser = new User({ name, userId, password });
+    const newUser = new User({ name, userId, role, password });
     await newUser.save();
 
     res.status(201).json({ message: "User created successfully", userId });

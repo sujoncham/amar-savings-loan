@@ -101,13 +101,13 @@ exports.deductLoanPayment = async (req, res) => {
 
 exports.editLoans = async (req, res) => {
   console.log(req.body);
-  const { totalLoan, name, note } = req.body;
+  const { totalLoan, name, note, referName } = req.body;
   const { id } = req.params;
 
   try {
     const loan = await Loan.findByIdAndUpdate(
       id,
-      { $set: { totalLoan, name, note } },
+      { $set: { totalLoan, name, note, referName } },
       { new: true }
     );
     if (!loan) {

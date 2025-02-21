@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 
 const loanSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true, unique: true },
   totalLoan: { type: Number, required: true },
+  memberId: { type: String, required: false },
+  nonMemberId: { type: String, required: false },
   remainingLoan: { type: Number, required: true },
   totalInterest: { type: Number, required: true },
   remainingInterest: { type: Number, required: true },

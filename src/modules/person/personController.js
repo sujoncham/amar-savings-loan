@@ -1,5 +1,17 @@
 const Person = require("./personModel");
 
+let lastAssignedNumber = 0; // This resets when the server restarts
+
+const generateMemberId = (name) => {
+  const year = new Date().getFullYear();
+  const letters = name.substring(0, 3).toUpperCase();
+
+  lastAssignedNumber++; // Increment for each new member
+  const formattedNumber = String(lastAssignedNumber).padStart(4, "0"); // Ensure 4-digit format
+
+  return `${letters}${year}${formattedNumber}`;
+};
+
 exports.getPerson = async (req, res) => {
   try {
     const persons = await Person.find();
@@ -18,9 +30,13 @@ exports.getPerson = async (req, res) => {
 exports.addOwner = async (req, res) => {
   // console.log(req.body);
   try {
+    const { name } = req.body;
+    const memberId = await generateMemberId(name);
+
     //create
     const result = new Person({
-      name: req.body.name,
+      name,
+      memberId,
     });
 
     const data = await result.save();
@@ -68,11 +84,12 @@ exports.editSavings = async (req, res) => {
   // console.log(req.body);
   const { savings, name } = req.body;
   const { id } = req.params;
+  const generateId = await generateMemberId(name);
 
   try {
     const person = await Person.findByIdAndUpdate(
       id,
-      { $set: { savings, name } },
+      { $set: { savings, name, memberId: generateId } },
       { new: true }
     );
     if (!person) {

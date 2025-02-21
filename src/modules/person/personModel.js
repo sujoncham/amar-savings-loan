@@ -7,6 +7,12 @@ const PersonSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    memberId: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+
     savings: {
       type: Number,
       required: true,

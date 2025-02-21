@@ -24,14 +24,12 @@ exports.signin = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    res
-      .status(200)
-      .json({
-        message: "Signin successful",
-        userId,
-        name: user.name,
-        role: user.role[0],
-      });
+    res.status(200).json({
+      message: "Signin successful",
+      userId,
+      name: user.name,
+      role: user.role,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error signing in", error });
   }
